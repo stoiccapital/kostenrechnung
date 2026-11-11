@@ -2,10 +2,12 @@ export type LineItem = {
   id: string;
   kgk?: string | null;
   text: string;
+  faktor: number;
   menge: number;
   einheit: string;
   einheitspreis: number;
   anmerkung?: string | null;
+  erlaeuterung?: string | null;
 };
 
 export type Section = {

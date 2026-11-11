@@ -24,10 +24,12 @@ function withIds(p: Omit<Project, "id"> & { id?: string }): Project {
           id: it.id ?? genId(),
           kgk: it.kgk ?? null,
           text: it.text,
+          faktor: it.faktor ?? 1,
           menge: it.menge ?? 0,
           einheit: it.einheit ?? "",
           einheitspreis: it.einheitspreis ?? 0,
           anmerkung: it.anmerkung ?? null,
+          erlaeuterung: it.erlaeuterung ?? null,
         })),
       })),
     })),
@@ -175,10 +177,12 @@ export const useStore = create<State>()(
           id,
           kgk: item?.kgk ?? null,
           text: item?.text ?? "Neue Position",
+          faktor: item?.faktor ?? 1,
           menge: item?.menge ?? 0,
           einheit: item?.einheit ?? "",
           einheitspreis: item?.einheitspreis ?? 0,
           anmerkung: item?.anmerkung ?? null,
+          erlaeuterung: item?.erlaeuterung ?? null,
         };
         set((s) => ({
           project: {
@@ -252,7 +256,10 @@ export const useStore = create<State>()(
 
 // Derived selectors (callers wrap in useMemo)
 export function sectionSum(section: Section): number {
-  return section.items.reduce((a, it) => a + it.menge * it.einheitspreis, 0);
+  return section.items.reduce(
+    (a, it) => a + (it.faktor ?? 1) * it.menge * it.einheitspreis,
+    0
+  );
 }
 export function bauwerkSum(b: Bauwerk): number {
   return b.sections.reduce((a, sec) => a + sectionSum(sec), 0);

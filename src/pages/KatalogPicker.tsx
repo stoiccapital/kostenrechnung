@@ -13,6 +13,7 @@ type PickResult = {
   bezeichnung: string;
   einheit: string | null;
   preis: number | null;
+  erlaeuterung: string | null;
 };
 
 export function KatalogPicker({
@@ -123,11 +124,10 @@ export function KatalogPicker({
                         onPick({
                           kgkCode: e.kgkCode,
                           bezeichnung:
-                            [e.bezeichnung, e.erlaeuterung]
-                              .filter(Boolean)
-                              .join(" — ") || e.kgkBezeichnung || "",
+                            e.bezeichnung || e.kgkBezeichnung || "",
                           einheit: e.einheit,
                           preis: e.preis,
+                          erlaeuterung: e.erlaeuterung,
                         });
                         onClose();
                       }}
@@ -159,11 +159,10 @@ export function KatalogPicker({
                             onPick({
                               kgkCode: e.kgkCode,
                               bezeichnung:
-                                [e.bezeichnung, e.erlaeuterung]
-                                  .filter(Boolean)
-                                  .join(" — ") || e.kgkBezeichnung || "",
+                                e.bezeichnung || e.kgkBezeichnung || "",
                               einheit: e.einheit,
                               preis: e.preis,
+                              erlaeuterung: e.erlaeuterung,
                             });
                             onClose();
                           }}
@@ -266,11 +265,10 @@ export function KatalogPicker({
                     onPick({
                       kgkCode: selected.kgkCode,
                       bezeichnung:
-                        [selected.bezeichnung, selected.erlaeuterung]
-                          .filter(Boolean)
-                          .join(" — ") || selected.kgkBezeichnung || "",
+                        selected.bezeichnung || selected.kgkBezeichnung || "",
                       einheit: selected.einheit,
                       preis: selected.preis,
+                      erlaeuterung: selected.erlaeuterung,
                     });
                     onClose();
                   }}

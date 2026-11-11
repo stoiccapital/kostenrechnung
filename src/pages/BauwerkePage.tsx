@@ -183,24 +183,34 @@ export function BauwerkePage({
                           <th className="text-left px-3 py-2 font-medium">
                             Text
                           </th>
-                          <th className="text-right px-3 py-2 font-medium w-28">
+                          <th className="text-right px-3 py-2 font-medium w-20">
+                            Faktor
+                          </th>
+                          <th className="text-left px-3 py-2 font-medium w-40">
+                            Anmerkung
+                          </th>
+                          <th className="text-right px-3 py-2 font-medium w-24">
                             Menge
                           </th>
-                          <th className="text-left px-3 py-2 font-medium w-16">
+                          <th className="text-left px-3 py-2 font-medium w-14">
                             Einh.
                           </th>
-                          <th className="text-right px-3 py-2 font-medium w-32">
+                          <th className="text-right px-3 py-2 font-medium w-28">
                             EP
                           </th>
-                          <th className="text-right px-3 py-2 font-medium w-36">
+                          <th className="text-right px-3 py-2 font-medium w-32">
                             Summe
+                          </th>
+                          <th className="text-left px-3 py-2 font-medium w-56">
+                            Erläuterung
                           </th>
                           <th className="w-8"></th>
                         </tr>
                       </thead>
                       <tbody>
                         {sec.items.map((it) => {
-                          const summe = it.menge * it.einheitspreis;
+                          const faktor = it.faktor ?? 1;
+                          const summe = faktor * it.menge * it.einheitspreis;
                           return (
                             <tr
                               key={it.id}
@@ -223,6 +233,27 @@ export function BauwerkePage({
                                   onChange={(v) =>
                                     updateItem(bauwerk.id, sec.id, it.id, {
                                       text: v,
+                                    })
+                                  }
+                                />
+                              </td>
+                              <td className="px-2 py-0.5">
+                                <NumInput
+                                  value={faktor}
+                                  onChange={(v) =>
+                                    updateItem(bauwerk.id, sec.id, it.id, {
+                                      faktor: v,
+                                    })
+                                  }
+                                  decimals={2}
+                                />
+                              </td>
+                              <td className="px-2 py-0.5">
+                                <TextInput
+                                  value={it.anmerkung ?? ""}
+                                  onChange={(v) =>
+                                    updateItem(bauwerk.id, sec.id, it.id, {
+                                      anmerkung: v || null,
                                     })
                                   }
                                 />
@@ -262,6 +293,16 @@ export function BauwerkePage({
                               <NumCell className="font-medium">
                                 {fmtEur(summe)}
                               </NumCell>
+                              <td className="px-2 py-0.5">
+                                <TextInput
+                                  value={it.erlaeuterung ?? ""}
+                                  onChange={(v) =>
+                                    updateItem(bauwerk.id, sec.id, it.id, {
+                                      erlaeuterung: v || null,
+                                    })
+                                  }
+                                />
+                              </td>
                               <td className="px-1">
                                 <button
                                   onClick={() =>
@@ -278,7 +319,7 @@ export function BauwerkePage({
                         {sec.items.length === 0 && (
                           <tr>
                             <td
-                              colSpan={7}
+                              colSpan={10}
                               className="px-4 py-6 text-center text-xs text-ink-400"
                             >
                               Keine Positionen. Fügen Sie eine Position hinzu
@@ -289,7 +330,7 @@ export function BauwerkePage({
                         {sec.items.length > 0 && (
                           <tr className="border-t-2 border-ink-200 bg-ink-50">
                             <td
-                              colSpan={5}
+                              colSpan={7}
                               className="px-3 py-2 text-xs font-medium text-ink-600 text-right"
                             >
                               Abschnittssumme
@@ -297,7 +338,7 @@ export function BauwerkePage({
                             <NumCell className="font-semibold">
                               {fmtEur(sum)}
                             </NumCell>
-                            <td />
+                            <td colSpan={2} />
                           </tr>
                         )}
                       </tbody>
@@ -325,9 +366,10 @@ export function BauwerkePage({
           onPick={(entry) => {
             addItem(bauwerk.id, katalogSectionId, {
               kgk: entry.kgkCode,
-              text: entry.bezeichnung,
+              text: entry.bezeichnung ?? "",
               einheit: entry.einheit ?? "",
               einheitspreis: entry.preis ?? 0,
+              erlaeuterung: entry.erlaeuterung,
             });
           }}
         />
